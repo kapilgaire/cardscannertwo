@@ -1,5 +1,6 @@
 package com.example.cardscannertwo.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.example.cardscannertwo.R;
 import com.example.cardscannertwo.data.remote.ApiClient;
 import com.example.cardscannertwo.data.response.CardDetails;
+import com.example.cardscannertwo.ui.detail.DetailActivity;
 import com.example.cardscannertwo.util.CustomDialog;
 import com.example.cardscannertwo.util.ErrorUtil;
 import com.example.cardscannertwo.util.Toaster;
@@ -64,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void intListener() {
         editText.addTextChangedListener(mTextWatcher);
+//        gifHomeIv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this, DetailActivity.class));
+//            }
+//        });
     }
 
     private void initViews() {
@@ -138,9 +146,9 @@ public class MainActivity extends AppCompatActivity {
 
                                 Log.e(TAG, "onResponse: " + cardDetailsList.toString());
 
-//                                Intent intentDetail = new Intent(MainActivity.this, DetailActivity.class);
-//                                intentDetail.putParcelableArrayListExtra("CARD_DETAIL_LIST", cardDetailsList);
-//                                startActivity(intentDetail);
+                                Intent intentDetail = new Intent(MainActivity.this, DetailActivity.class);
+                                intentDetail.putParcelableArrayListExtra("CARD_DETAIL_LIST", cardDetailsList);
+                                startActivity(intentDetail);
                             } else {
 
 

@@ -12,4 +12,15 @@
     <string name="font_family_condensed">sans-serif-condensed</string>
     <string name="font_family_black">sans-serif-black</string>
     <string name="font_family_thin">sans-serif-thin</string>
+
+    <!--label and hints-->
+    <string name="label_if_other">If Other</string>
+    <string name="hint_enter_vehicle_no">Enter vehicle No</string>
+    <string name="label_petrol">Petrol</string>
+    <string name="label_diesel">Diesel</string>
+    <string name="hint_enter_quantity_in_ltrs">Enter Quantity in ltrs.</string>
+    <string name="hint_enter_meter_reading">Enter Meter Reading</string>
+    <string name="btn_text_submit">Submit</string>
+
+
 </resources>
