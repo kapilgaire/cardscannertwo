@@ -13,14 +13,17 @@ public final class ErrorUtil {
 
 
         if (!NetworkHelperKt.isNetworkConnected(context)) {
-            Toast.makeText(context, context.getResources().getString(R.string.msg_internet_connection), Toast.LENGTH_SHORT).show();
+
+            Toaster.show(context, context.getResources().getString(R.string.msg_internet_connection));
         } else {
             if (throwable instanceof TimeoutException) {
-                Toast.makeText(context, context.getResources().getString(R.string.msg_internet_connection), Toast.LENGTH_SHORT).show();
+                Toaster.show(context, context.getResources().getString(R.string.msg_internet_connection));
+
 
             } else {
+                Toaster.show(context, context.getResources().getString(R.string.error_network_msg));
 
-                Toast.makeText(context, context.getResources().getString(R.string.error_network_msg), Toast.LENGTH_SHORT).show();
+
 
             }
         }

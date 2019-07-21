@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/label_transaction_tv"
+    android:orientation="horizontal"
+    android:weightSum="3">
+
+    <TextView android:id="@+id/registration_no_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+
+        android:fontFamily="@string/font_family_condensed"
+        android:text="@string/label_registration_no"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_medium"
+        />
+
+    <TextView android:id="@+id/date_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="@string/font_family_condensed"
+        android:text="@string/label_date"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_medium"
+        />
+
+    <TextView android:id="@+id/qty_tv"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="@string/font_family_condensed"
+        android:text="@string/label_qty_litres"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_medium"
+        />
+</LinearLayout>

@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             app:counterEnabled="true"
             app:counterMaxLength="10"
-            app:helperText="*Required">
+            app:errorTextAppearance="@style/ErrorText">
 
             <EditText
                 android:id="@+id/vehicle_no_et"
@@ -82,6 +82,7 @@
                 android:id="@+id/petrol_rb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:fontFamily="@string/font_family_condensed"
                 android:text="@string/label_petrol"
                 android:textColor="@color/black"
@@ -99,56 +100,169 @@
         </RadioGroup>
     </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/qty_til"
-        style="@style/AppTextField"
+    <LinearLayout
+        android:id="@+id/detail_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/if_other_cb_ll"
-        app:helperText="*Required">
+        android:layout_marginBottom="2dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
-        <EditText
-            android:id="@+id/qty_no_et"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/qty_til"
+            style="@style/AppTextField"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:fontFamily="@string/font_family_condensed"
-            android:hint="@string/hint_enter_quantity_in_ltrs"
-            android:inputType="numberDecimal"
-            android:maxLines="1"
-            android:singleLine="true" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_marginEnd="2dp"
+            android:layout_weight="1">
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/meter_reading_til"
-        style="@style/AppTextField"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/qty_til"
-        app:helperText="*Required">
+            <EditText
+                android:id="@+id/qty_no_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="@string/font_family_condensed"
+                android:hint="@string/hint_enter_quantity_in_ltrs"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/meter_reading_et"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/meter_reading_til"
+            style="@style/AppTextField"
+            android:layout_width="0dp"
+
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:fontFamily="@string/font_family_condensed"
-            android:hint="@string/hint_enter_meter_reading"
-            android:inputType="numberDecimal"
-            android:maxLines="1"
-            android:singleLine="true" />
-    </com.google.android.material.textfield.TextInputLayout>
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/meter_reading_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:fontFamily="@string/font_family_condensed"
+                android:hint="@string/hint_enter_meter_reading"
+                android:inputType="numberDecimal"
+                android:maxLines="1"
+                android:singleLine="true" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
 
     <Button
         android:id="@+id/submit_mbtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/meter_reading_til"
+        android:layout_below="@id/detail_ll"
+        android:layout_marginBottom="4dp"
         android:background="@color/colorPrimary"
+
         android:fontFamily="@string/font_family_condensed"
         android:text="@string/btn_text_submit"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_large" />
+
+    <LinearLayout android:id="@+id/btn_set_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/submit_mbtn"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <Button
+            android:id="@+id/report_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:fontFamily="@string/font_family_condensed"
+            android:text="@string/label_day_wise_report"
+            android:textAllCaps="false"
+            android:layout_marginRight="2dp"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large" />
+        <Button
+            android:id="@+id/home_btn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:fontFamily="@string/font_family_condensed"
+            android:text="@string/label_go_to_home"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_large" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/label_transaction_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_set_ll"
+        android:fontFamily="@string/font_family_condensed"
+        android:text="@string/label_fuel_transaction"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/header_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label_transaction_tv"
+        android:background="@color/grey"
+        android:orientation="horizontal"
+        android:padding="4dp"
+        android:weightSum="3">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/rectangular_right_line"
+            android:fontFamily="@string/font_family_condensed"
+            android:text="@string/label_registration_no"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/rectangular_right_line"
+            android:fontFamily="@string/font_family_condensed"
+            android:text="@string/label_date"
+            android:textAlignment="center"
+
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@string/font_family_condensed"
+            android:text="@string/label_qty_litres"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fuel_transaction_list_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_ll">
+
+    </androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>
