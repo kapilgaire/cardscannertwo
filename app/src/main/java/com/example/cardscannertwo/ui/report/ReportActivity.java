@@ -2,8 +2,8 @@ package com.example.cardscannertwo.ui.report;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,6 +19,7 @@ import com.example.cardscannertwo.data.response.ReportDetails;
 import com.example.cardscannertwo.util.AppUtil;
 import com.example.cardscannertwo.util.CustomDialog;
 import com.example.cardscannertwo.util.ErrorUtil;
+import com.example.cardscannertwo.util.SharedPrefUtil;
 import com.example.cardscannertwo.util.SimpleDividerItemDecoration;
 import com.example.cardscannertwo.util.Toaster;
 
@@ -39,7 +40,7 @@ public class ReportActivity extends AppCompatActivity {
     private RecyclerView reportListRv;
     private TextView fuelTypeTv;
     private TextView totalTv;
-    private Button homeBtn;
+//    private Button homeBtn;
 
 
     @Override
@@ -47,15 +48,18 @@ public class ReportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report);
         initViews();
+        toolbar.setTitle("Day Wise Reports");
 
         setSupportActionBar(toolbar);
 
-        homeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AppUtil.goToHome(ReportActivity.this);
-            }
-        });
+//        homeBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                AppUtil.goToHome(ReportActivity.this);
+//            }
+//        });
+
+        siteNameTv.setText("Today's Report: "+SharedPrefUtil.getString(ReportActivity.this, "HONDA_PREF", "SITE_NAME"));
         mCustomDialog = new CustomDialog(this);
         mReportDetailAdapter = new ReportDetailAdapter(this);
         reportListRv.setLayoutManager(new LinearLayoutManager(this));
@@ -74,56 +78,78 @@ public class ReportActivity extends AppCompatActivity {
 
         fuelTypeTv = findViewById(R.id.fuel_type_tv);
         totalTv = findViewById(R.id.total_tv);
-        homeBtn = findViewById(R.id.home_btn);
+//        homeBtn = findViewById(R.id.home_btn);
 
     }
 
     private void getReport() {
+        mCustomDialog.showLoadingDialogWithMessage("Loading...");
 
-        ApiClient.getApiClient().getDayWiseReport("Dayal Honda Sutyana", "honda").enqueue(new Callback<ArrayList<ReportDetails>>() {
-            @Override
-            public void onResponse(Call<ArrayList<ReportDetails>> call, Response<ArrayList<ReportDetails>> response) {
-                mCustomDialog.hideLoadingDialogWithMessage();
-                if (response.code() == 200) {
-                    ArrayList<ReportDetails> reportDetailsArrayList = response.body();
+        ApiClient.getApiClient().getDayWiseReport(SharedPrefUtil.getString(ReportActivity.this, "HONDA_PREF", "SITE_NAME"),
+                SharedPrefUtil.getString(ReportActivity.this, "HONDA_PREF", "KEY"))
+                .enqueue(new Callback<ArrayList<ReportDetails>>() {
+                    @Override
+                    public void onResponse(Call<ArrayList<ReportDetails>> call, Response<ArrayList<ReportDetails>> response) {
+                        mCustomDialog.hideLoadingDialogWithMessage();
+                        if (response.code() == 200) {
+                            ArrayList<ReportDetails> reportDetailsArrayList = response.body();
 
-                    if (reportDetailsArrayList != null) {
-                        if (reportDetailsArrayList.size() > 0) {
-                            String msg = reportDetailsArrayList.get(0).getErrorMessage();
+                            if (reportDetailsArrayList != null) {
+                                if (reportDetailsArrayList.size() > 0) {
+                                    String msg = reportDetailsArrayList.get(0).getErrorMessage();
 
-                            if (msg == null) {
-                                Log.e("list", reportDetailsArrayList.toString());
-                                mReportDetailAdapter.addAll(reportDetailsArrayList);
+                                    if (msg == null) {
+                                        Log.e("list", reportDetailsArrayList.toString());
+                                        mReportDetailAdapter.addAll(reportDetailsArrayList);
 
-                                totalTv.setText(reportDetailsArrayList.get(0).getTotalfuel());
-                                fuelTypeTv.setText(reportDetailsArrayList.get(0).getFuelType() + " : "
-                                        + reportDetailsArrayList.get(0).getTotalfuel());
-                            } else {
+                                        totalTv.setText(reportDetailsArrayList.get(0).getTotalfuel());
+                                        fuelTypeTv.setText(reportDetailsArrayList.get(0).getFuelType() + " : "
+                                                + reportDetailsArrayList.get(0).getTotalfuel());
+                                    } else {
 
 
-                                Toaster.show(ReportActivity.this, msg);
+                                        Toaster.show(ReportActivity.this, msg);
 
+                                    }
+                                } else {
+                                    Toaster.show(ReportActivity.this, "No Report Available");
+
+                                }
                             }
+
+
                         } else {
-                            Toaster.show(ReportActivity.this, "No Report Available");
+                            Toaster.show(ReportActivity.this, String.valueOf(response.code()));
 
                         }
                     }
 
+                    @Override
+                    public void onFailure(Call<ArrayList<ReportDetails>> call, Throwable t) {
+                        mCustomDialog.hideLoadingDialogWithMessage();
 
-                } else {
-                    Toaster.show(ReportActivity.this, String.valueOf(response.code()));
+                        ErrorUtil.showErrorView(t, ReportActivity.this);
+                    }
+                });
+    }
 
-                }
-            }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
-            @Override
-            public void onFailure(Call<ArrayList<ReportDetails>> call, Throwable t) {
-                mCustomDialog.hideLoadingDialogWithMessage();
+        return true;
+    }
 
-                ErrorUtil.showErrorView(t, ReportActivity.this);
-            }
-        });
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        //Functionality if we press back button
+        if (id == R.id.action_home) {
+            AppUtil.goToHome(ReportActivity.this);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

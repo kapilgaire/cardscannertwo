@@ -1,11 +1,12 @@
 package com.example.cardscannertwo.ui.detail;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -28,10 +29,10 @@ import com.example.cardscannertwo.data.request.RequestBuilder;
 import com.example.cardscannertwo.data.response.CardDetails;
 import com.example.cardscannertwo.data.response.SuccessResponse;
 import com.example.cardscannertwo.data.response.TransactionDetails;
-import com.example.cardscannertwo.ui.report.ReportActivity;
 import com.example.cardscannertwo.util.AppUtil;
 import com.example.cardscannertwo.util.CustomDialog;
 import com.example.cardscannertwo.util.ErrorUtil;
+import com.example.cardscannertwo.util.SharedPrefUtil;
 import com.example.cardscannertwo.util.SimpleDividerItemDecoration;
 import com.example.cardscannertwo.util.Toaster;
 import com.google.android.material.textfield.TextInputLayout;
@@ -76,7 +77,7 @@ public class DetailActivity extends AppCompatActivity {
     private String registrationNo = null;
 
     private CustomDialog mCustomDialog;
-    private Button homeBtn;
+//    private Button homeBtn;
 
 
     @Override
@@ -86,6 +87,7 @@ public class DetailActivity extends AppCompatActivity {
         cardDetailsList = getIntent().getParcelableArrayListExtra("CARD_DETAIL_LIST");
 
         initViews();
+        toolbar.setTitle(AppUtil.setTypeFaceToolbar(cardDetailsList.get(0).getCardsNO()));
         setSupportActionBar(toolbar);
 
         initListener();
@@ -155,15 +157,15 @@ public class DetailActivity extends AppCompatActivity {
                 case R.id.submit_mbtn:
                     submit();
                     break;
-                case R.id.report_btn:
+//                case R.id.report_btn:
+//
+//                    Intent intent = new Intent(DetailActivity.this, ReportActivity.class);
+//                    startActivity(intent);
+//                    break;
 
-                    Intent intent = new Intent(DetailActivity.this, ReportActivity.class);
-                    startActivity(intent);
-                    break;
-
-                case R.id.home_btn:
-                    AppUtil.goToHome(DetailActivity.this);
-                    break;
+//                case R.id.home_btn:
+//                    AppUtil.goToHome(DetailActivity.this);
+//                    break;
             }
         }
     };
@@ -228,8 +230,8 @@ public class DetailActivity extends AppCompatActivity {
         vehicleNoEt.addTextChangedListener(mVehicleTextWatcher);
         qtyNoEt.addTextChangedListener(mQtyTextWatcher);
         meterReadingEt.addTextChangedListener(mMeterTextWatcher);
-        reportBtn.setOnClickListener(mOnClickListener);
-        homeBtn.setOnClickListener(mOnClickListener);
+//        reportBtn.setOnClickListener(mOnClickListener);
+//        homeBtn.setOnClickListener(mOnClickListener);
     }
 
     private void initViews() {
@@ -250,7 +252,7 @@ public class DetailActivity extends AppCompatActivity {
         ifOtherCbLl = findViewById(R.id.if_other_cb_ll);
         fuelTransactionListRv = findViewById(R.id.fuel_transaction_list_rv);
         reportBtn = findViewById(R.id.report_btn);
-        homeBtn =  findViewById(R.id.home_btn);
+//        homeBtn = findViewById(R.id.home_btn);
 
     }
 
@@ -288,7 +290,7 @@ public class DetailActivity extends AppCompatActivity {
             } else if (meterReading.isEmpty()) {
                 meterReadingTil.setError("Enter Meter Reading");
 
-            } else if (TextUtils.isEmpty(cardNo)) {
+            } else if (TextUtils.isEmpty(cardDetailsList.get(0).getCardsNO())) {
 
                 Toaster.show(this, "Select card");
             } else if (fuelType.isEmpty()) {
@@ -323,7 +325,7 @@ public class DetailActivity extends AppCompatActivity {
     private void save(String meterReading, String quantity, String cardNo, String fuelType, String registrationNo, String ifOther) {
 
 
-        mCustomDialog.showLoadingDialogWithMessage("Saving");
+        mCustomDialog.showLoadingDialogWithMessage("Saving...");
 
 
         RequestBuilder requestBuilder = new RequestBuilder.RequestParameterBuilder()
@@ -333,8 +335,8 @@ public class DetailActivity extends AppCompatActivity {
                 .setFuelType(fuelType)
                 .setIfOther(ifOther)
                 .setRegistrationNo(registrationNo)
-                .setKey("honda")
-                .setSiteName("Dayal Honda Sutyana").build();
+                .setKey(SharedPrefUtil.getString(DetailActivity.this, "HONDA_PREF", "KEY"))
+                .setSiteName(SharedPrefUtil.getString(DetailActivity.this, "HONDA_PREF", "SITE_NAME")).build();
 
         Log.e(TAG, "save: " + new Gson().toJson(requestBuilder));
 
@@ -348,6 +350,10 @@ public class DetailActivity extends AppCompatActivity {
 
                     if (successResponse != null) {
                         Toaster.show(DetailActivity.this, successResponse.getMessage());
+                        ifOtherCb.setChecked(false);
+                        vehicleNoEt.setText("");
+
+                        getFuelDetail();
                     }
                 } else {
                     Toaster.show(DetailActivity.this, String.valueOf(response.code()));
@@ -366,7 +372,9 @@ public class DetailActivity extends AppCompatActivity {
 
     private void getFuelDetail() {
 
-        ApiClient.getApiClient().getCardFuelDetails(cardDetailsList.get(0).getCardsNO(), "honda").enqueue(new Callback<ArrayList<TransactionDetails>>() {
+        ApiClient.getApiClient().getCardFuelDetails(cardDetailsList.get(0).getCardsNO(),
+                SharedPrefUtil.getString(DetailActivity.this, "HONDA_PREF", "KEY"),
+                SharedPrefUtil.getString(DetailActivity.this, "HONDA_PREF", "SITE_NAME")).enqueue(new Callback<ArrayList<TransactionDetails>>() {
             @Override
             public void onResponse(Call<ArrayList<TransactionDetails>> call, Response<ArrayList<TransactionDetails>> response) {
                 mCustomDialog.hideLoadingDialogWithMessage();
@@ -379,6 +387,7 @@ public class DetailActivity extends AppCompatActivity {
 
                             if (msg == null) {
 
+                                mTransactionAdapter.clear();
                                 mTransactionAdapter.addAll(transactionDetailList);
 //
                             } else {
@@ -389,6 +398,7 @@ public class DetailActivity extends AppCompatActivity {
                             }
                         } else {
 
+                            ifOtherCb.setChecked(true);
                             //no Fuel transaction
                         }
                     }
@@ -407,6 +417,25 @@ public class DetailActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        //Functionality if we press back button
+        if (id == R.id.action_home) {
+            AppUtil.goToHome(DetailActivity.this);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

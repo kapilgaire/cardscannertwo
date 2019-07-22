@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">cardscanner</string>
+    <string name="app_name">Vahanurja</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail">Details</string>
     <string name="title_activity_report">Day Wise Reports</string>
@@ -16,7 +16,7 @@
     <string name="font_family_thin">sans-serif-thin</string>
 
     <!--label and hints-->
-    <string name="label_if_other">If Other</string>
+    <string name="label_if_other">Other Vehicle</string>
     <string name="hint_enter_vehicle_no">Enter vehicle No</string>
     <string name="label_petrol">Petrol</string>
     <string name="label_diesel">Diesel</string>
@@ -27,10 +27,13 @@
     <string name="label_registration_no">Registration No.</string>
     <string name="label_date">Date</string>
     <string name="label_qty_litres">Qty (Litres)</string>
-    <string name="label_day_wise_report">Day Wise Report</string>
+    <string name="label_day_wise_report">Today\'s Report</string>
     <string name="label_username">Username</string>
     <string name="label_total">Total</string>
     <string name="label_go_to_home">Go To Home</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="label_select_site">SELECT SITE</string>
+    <string name="label_submit">Submit</string>
 
 
 </resources>

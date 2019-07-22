@@ -15,11 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@string/font_family_condensed"
-        android:text="Todays Report : Dayal Honda Sutyana"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_large"
 
-        android:textStyle="bold" />
+        />
 
     <TextView
         android:id="@+id/fuel_type_tv"
@@ -28,7 +27,7 @@
         android:fontFamily="@string/font_family_condensed"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_large"
-        android:textStyle="bold"
+
 
         />
 
@@ -120,16 +119,6 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/home_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:background="@color/colorPrimary"
-        android:fontFamily="@string/font_family_condensed"
-        android:text="@string/label_go_to_home"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_large" />
+
 
 </LinearLayout>

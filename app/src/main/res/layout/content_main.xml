@@ -4,45 +4,56 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="4dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.main.MainActivity"
+    tools:context="com.example.cardscannertwo.ui.main.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <FrameLayout
-        android:id="@+id/cover_fl"
+    <TextView
+        android:id="@+id/site_name_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_above="@id/site_name_fl"
+        android:layout_centerInParent="true"
+        android:fontFamily="@string/font_family_condensed"
+        android:padding="2dp"
+        android:text="@string/label_select_site"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_large"
+         />
 
-        <RelativeLayout
+
+    <FrameLayout
+        android:id="@+id/site_name_fl"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/bg_spinner"
+        android:padding="10dp">
+
+        <Spinner
+            android:id="@+id/site_name_spinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:spinnerMode="dialog"
 
-            <EditText
-                android:id="@+id/edit_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
 
-            <ImageView
-                android:id="@+id/gif_home_iv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textSize="20sp" />
-        </RelativeLayout>
+            />
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/no_tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/cover_fl"
-        android:layout_centerInParent="true"
-        android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_below="@id/site_name_fl"
+        android:background="@color/colorPrimary"
+        android:fontFamily="@string/font_family_condensed"
+        android:text="@string/label_submit"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_large" />
 </RelativeLayout>

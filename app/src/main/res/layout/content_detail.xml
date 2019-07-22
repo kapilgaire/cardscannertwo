@@ -18,6 +18,7 @@
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_large"
         android:textStyle="bold"
+        android:textAlignment="center"
 
         />
 
@@ -35,7 +36,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/vehicle_list_rv"
         android:fontFamily="@string/font_family_condensed"
+        android:gravity="center"
         android:text="@string/label_if_other"
+        android:textAlignment="center"
         android:textSize="@dimen/text_size_medium" />
 
     <LinearLayout
@@ -166,37 +169,15 @@
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_large" />
 
-    <LinearLayout android:id="@+id/btn_set_ll"
+    <LinearLayout
+        android:id="@+id/btn_set_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/submit_mbtn"
         android:orientation="horizontal"
         android:weightSum="2">
 
-        <Button
-            android:id="@+id/report_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:fontFamily="@string/font_family_condensed"
-            android:text="@string/label_day_wise_report"
-            android:textAllCaps="false"
-            android:layout_marginRight="2dp"
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_large" />
-        <Button
-            android:id="@+id/home_btn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
 
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:fontFamily="@string/font_family_condensed"
-            android:text="@string/label_go_to_home"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_large" />
     </LinearLayout>
 
     <TextView
@@ -206,6 +187,7 @@
         android:layout_below="@id/btn_set_ll"
         android:fontFamily="@string/font_family_condensed"
         android:text="@string/label_fuel_transaction"
+        android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold" />
