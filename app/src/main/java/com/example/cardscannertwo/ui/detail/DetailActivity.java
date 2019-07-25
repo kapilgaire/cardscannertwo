@@ -129,6 +129,8 @@ public class DetailActivity extends AppCompatActivity {
             fuelType = cardDetails.getFuelType();
             registrationNo = cardDetails.getRegistrationNo();
 
+            ifOtherCb.setChecked(false);
+
 
         }
     };
@@ -140,6 +142,7 @@ public class DetailActivity extends AppCompatActivity {
             switch (buttonView.getId()) {
                 case R.id.if_other_cb:
                     if (isChecked) {
+                        mUserDetailAdapter.setRow_index(-1);
                         ifOtherCbLl.setVisibility(View.VISIBLE);
                     } else {
                         ifOtherCbLl.setVisibility(View.GONE);
@@ -347,13 +350,28 @@ public class DetailActivity extends AppCompatActivity {
                 if (response.code() == 200) {
 
                     SuccessResponse successResponse = response.body();
+                    Log.e(TAG, new Gson().toJson(successResponse));
 
                     if (successResponse != null) {
-                        Toaster.show(DetailActivity.this, successResponse.getMessage());
-                        ifOtherCb.setChecked(false);
-                        vehicleNoEt.setText("");
+                        if (successResponse.getMessage().equalsIgnoreCase("success")) {
+                            Toaster.show(DetailActivity.this, successResponse.getMessage());
+                            ifOtherCb.setChecked(false);
+                            vehicleNoEt.setText("");
 
-                        getFuelDetail();
+                            /*hide after submit folrm*/
+                            mUserDetailAdapter.clear();
+                            ifOtherCbLl.setVisibility(View.GONE);
+                            ifOtherCb.setVisibility(View.GONE);
+                            qtyTil.setVisibility(View.GONE);
+                            meterReadingTil.setVisibility(View.GONE);
+                            submitMbtn.setVisibility(View.GONE);
+
+                            AppUtil.hideKeyboard(DetailActivity.this);
+                            getFuelDetail();
+                        } else {
+                            Toaster.show(DetailActivity.this, successResponse.getMessage());
+
+                        }
                     }
                 } else {
                     Toaster.show(DetailActivity.this, String.valueOf(response.code()));

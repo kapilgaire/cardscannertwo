@@ -51,7 +51,7 @@ public class ReportDetailAdapter extends RecyclerView.Adapter<ReportDetailAdapte
 
     }
 
-    private void add(ReportDetails data) {
+    public void add(ReportDetails data) {
         mReportDetailsArrayList.add(data);
 
 

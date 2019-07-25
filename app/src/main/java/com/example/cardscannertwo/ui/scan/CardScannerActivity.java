@@ -113,6 +113,7 @@ public class CardScannerActivity extends AppCompatActivity {
 
             if (s.length() > 0) {
                 timer = new Timer();
+
                 timer.schedule(
                         new TimerTask() {
                             @Override

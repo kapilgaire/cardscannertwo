@@ -15,10 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@string/font_family_condensed"
+        android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_large"
         android:textStyle="bold"
-        android:textAlignment="center"
 
         />
 
@@ -32,9 +32,10 @@
 
     <CheckBox
         android:id="@+id/if_other_cb"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/vehicle_list_rv"
+        android:layout_centerInParent="true"
         android:fontFamily="@string/font_family_condensed"
         android:gravity="center"
         android:text="@string/label_if_other"
@@ -57,7 +58,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:counterEnabled="true"
-            app:counterMaxLength="10"
+            app:counterMaxLength="15"
             app:errorTextAppearance="@style/ErrorText">
 
             <EditText
@@ -65,10 +66,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-
                 android:fontFamily="@string/font_family_condensed"
                 android:hint="@string/hint_enter_vehicle_no"
                 android:inputType="text"
+                android:maxLength="15"
                 android:maxLines="1"
                 android:singleLine="true" />
         </com.google.android.material.textfield.TextInputLayout>

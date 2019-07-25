@@ -2,7 +2,7 @@
     <string name="app_name">Vahanurja</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_detail">Details</string>
-    <string name="title_activity_report">Day Wise Reports</string>
+    <string name="title_activity_report">Today\'s Report</string>
 
     <string name="msg_internet_connection">Please Check Your Internet Connection</string>
     <string name="error_network_msg">Something Went Wrong Please Try Again!</string>
@@ -23,7 +23,7 @@
     <string name="hint_enter_quantity_in_ltrs">Enter Quantity(ltrs.)</string>
     <string name="hint_enter_meter_reading">Enter Meter Reading</string>
     <string name="btn_text_submit">Submit</string>
-    <string name="label_fuel_transaction">Fuel transaction</string>
+    <string name="label_fuel_transaction">Fuel Transaction</string>
     <string name="label_registration_no">Registration No.</string>
     <string name="label_date">Date</string>
     <string name="label_qty_litres">Qty (Litres)</string>
@@ -34,6 +34,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="label_select_site">SELECT SITE</string>
     <string name="label_submit">Submit</string>
+    <string name="label_by">by</string>
 
 
 </resources>
