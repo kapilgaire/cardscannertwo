@@ -197,7 +197,6 @@ public class DetailActivity extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.submit_mbtn:
                     submit();
-                    resetTimer();
 
                     break;
 
@@ -225,12 +224,14 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            resetTimer();
+
 
         }
 
         @Override
         public void afterTextChanged(Editable s) {
+            stopCountdown();
+
             if (s.length() > 0) {
                 vehicleNoTil.setError(null);
             }
@@ -244,12 +245,13 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            resetTimer();
+
 
         }
 
         @Override
         public void afterTextChanged(Editable s) {
+            stopCountdown();
             if (s.length() > 0) {
                 meterReadingTil.setError(null);
             }
@@ -263,12 +265,14 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            resetTimer();
 
         }
 
         @Override
         public void afterTextChanged(Editable s) {
+
+            stopCountdown();
+
             if (s.length() > 0) {
                 qtyTil.setError(null);
             }
@@ -377,7 +381,7 @@ public class DetailActivity extends AppCompatActivity {
             } else if (fuelType.isEmpty()) {
                 Toaster.show(this, "Select Fuel Type");
             } else {
-                save(meterReading, quantity, cardNo, fuelType, vehicleNo, "true");
+                save(meterReading, quantity, cardDetailsList.get(0).getCardsNO(), fuelType, vehicleNo, "true");
             }
         } else {
             String meterReading = meterReadingEt.getText().toString();

@@ -29,7 +29,7 @@ public class ReportDetailAdapter extends RecyclerView.Adapter<ReportDetailAdapte
     public DataHolder onCreateViewHolder(ViewGroup parent,
                                          int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.report_layout, parent, false);
+                .inflate(R.layout.report_layout_two, parent, false);
 
 
         DataHolder myViewHolder = new DataHolder(view);
@@ -42,7 +42,7 @@ public class ReportDetailAdapter extends RecyclerView.Adapter<ReportDetailAdapte
 
         holder.usernameNoTv.setText(mReportDetailsArrayList.get(listPosition).getUserName());
         holder.regTv.setText(mReportDetailsArrayList.get(listPosition).getRegistrationNo());
-        holder.qtyTv.setText(mReportDetailsArrayList.get(listPosition).getQuantity());
+        holder.qtyTv.setText(mReportDetailsArrayList.get(listPosition).getQuantity()+" Ltrs.");
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.cardscannertwo.ui.report;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.example.cardscannertwo.util.ErrorUtil;
 import com.example.cardscannertwo.util.SharedPrefUtil;
 import com.example.cardscannertwo.util.SimpleDividerItemDecoration;
 import com.example.cardscannertwo.util.Toaster;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -30,7 +32,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ReportActivity extends AppCompatActivity {
-    Toolbar toolbar;
+    private Toolbar toolbar;
 
     private CustomDialog mCustomDialog;
 
@@ -40,9 +42,9 @@ public class ReportActivity extends AppCompatActivity {
     private LinearLayout headerLl;
     private RecyclerView reportListRv, report_list_diesel_rv;
     private TextView fuelTypeTv;
-    private TextView totalTv;
+    //    private TextView totalTv;
     private static final String TAG = "ReportActivity";
-    private TextView totalPetrolTv;
+//    private TextView totalPetrolTv;
 
     //    private Button homeBtn;
     private TextView fuelTypeTwoTv;
@@ -73,13 +75,13 @@ public class ReportActivity extends AppCompatActivity {
 
         reportListRv.setLayoutManager(new LinearLayoutManager(this));
         reportListRv.setAdapter(mReportDetailAdapter);
-        reportListRv.addItemDecoration(new SimpleDividerItemDecoration(this, DividerItemDecoration.VERTICAL, 0));
+        reportListRv.addItemDecoration(new SimpleDividerItemDecoration(this, DividerItemDecoration.VERTICAL, 35));
 
         mDeiselReportDetailAdapter = new ReportDetailAdapter(this);
         report_list_diesel_rv.setLayoutManager(new LinearLayoutManager(this));
         report_list_diesel_rv.setAdapter(mDeiselReportDetailAdapter);
-        report_list_diesel_rv.addItemDecoration(new SimpleDividerItemDecoration(this, DividerItemDecoration.VERTICAL, 0));
-
+        report_list_diesel_rv.addItemDecoration(new SimpleDividerItemDecoration(this, DividerItemDecoration.VERTICAL, 35));
+//
 
         getReport();
     }
@@ -87,17 +89,17 @@ public class ReportActivity extends AppCompatActivity {
     private void initViews() {
         toolbar = findViewById(R.id.toolbar);
         siteNameTv = findViewById(R.id.site_name_tv);
-        headerLl = findViewById(R.id.header_ll);
+//        headerLl = findViewById(R.id.header_ll);
         reportListRv = findViewById(R.id.report_list_rv);
         report_list_diesel_rv = findViewById(R.id.report_list_diesel_rv);
         fuelTypeTwoTv = findViewById(R.id.fuel_type_two_tv);
 
         fuelTypeTv = findViewById(R.id.fuel_type_tv);
-        totalTv = findViewById(R.id.total_tv);
+//        totalTv = findViewById(R.id.total_tv);
 //        homeBtn = findViewById(R.id.home_btn);
         noDataLl = findViewById(R.id.no_data_ll);
 
-        totalPetrolTv = findViewById(R.id.total_petrol_tv);
+//        totalPetrolTv = findViewById(R.id.total_petrol_tv);
         dataLayoutLl = findViewById(R.id.data_layout_ll);
 
     }
@@ -114,6 +116,8 @@ public class ReportActivity extends AppCompatActivity {
                         if (response.code() == 200) {
                             ArrayList<ReportDetails> reportDetailsArrayList = response.body();
 
+                            Log.e(TAG, "onResponse: "+ new Gson().toJson(reportDetailsArrayList) );
+
 
                             if (reportDetailsArrayList != null) {
                                 if (reportDetailsArrayList.size() > 0) {
@@ -125,22 +129,22 @@ public class ReportActivity extends AppCompatActivity {
                                         hideNoDataLayot();
 
                                         String deisel = "0", petrol = "0";
+
+
                                         for (ReportDetails rd : reportDetailsArrayList) {
                                             if (rd.getFuelType().equalsIgnoreCase("Petrol")) {
+
                                                 mReportDetailAdapter.add(rd);
-                                                fuelTypeTv.setText(rd.getFuelType() + " : "
-                                                        + rd.getTotalfuel() + " Ltrs.");
 
                                                 petrol = rd.getTotalfuel();
 
                                             } else {
                                                 mDeiselReportDetailAdapter.add(rd);
-                                                fuelTypeTwoTv.setText(rd.getFuelType() + " : "
-                                                        + rd.getTotalfuel() + " Ltrs.");
                                                 deisel = rd.getTotalfuel();
                                             }
                                         }
-
+                                        fuelTypeTv.setText("Petrol" + " : " + petrol + " Ltrs.");
+                                        fuelTypeTwoTv.setText("Diesel " + deisel + " Ltrs.");
                                        /* String total="0";
 
                                         try {
@@ -151,8 +155,8 @@ public class ReportActivity extends AppCompatActivity {
 
                                             Log.e(TAG, "onResponse: "+e.getMessage() );
                                         }*/
-                                        totalTv.setText(deisel);
-                                        totalPetrolTv.setText(petrol);
+//                                        totalTv.setText(deisel);
+//                                        totalPetrolTv.setText(petrol);
 
 
                                     } else {

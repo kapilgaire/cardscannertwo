@@ -10,358 +10,361 @@
     tools:context="com.example.cardscannertwo.ui.detail.DetailActivity"
     tools:showIn="@layout/activity_detail">
 
-
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/card_info_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@string/font_family_condensed"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_large"
-            android:textStyle="bold"
-
-            />
-
+        android:layout_height="wrap_content">
 
         <RelativeLayout
-            android:id="@+id/form_layout_rl"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/card_info_tv"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:layout_height="wrap_content">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/vehicle_list_rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            </androidx.recyclerview.widget.RecyclerView>
-
-
-            <LinearLayout android:id="@+id/ll_cb"
+            <TextView
+                android:id="@+id/card_info_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/vehicle_list_rv"
-                android:gravity="center"
-                android:padding="10dp"
-                android:background="@color/white"
-                android:layout_centerInParent="true">
+                android:fontFamily="@string/font_family_condensed"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="bold"
 
-                <CheckBox
-                    android:id="@+id/if_other_cb"
-                    android:layout_width="wrap_content"
+                />
+
+
+            <RelativeLayout
+                android:id="@+id/form_layout_rl"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/card_info_tv"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/vehicle_list_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_cb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/vehicle_list_rv"
+                    android:layout_centerInParent="true"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:padding="10dp">
+
+                    <CheckBox
+                        android:id="@+id/if_other_cb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@string/font_family_condensed"
+                        android:text="@string/label_if_other"
+                        android:textAlignment="center"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="@dimen/text_size_large"
+
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/if_other_cb_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ll_cb"
+                    android:animateLayoutChanges="true"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/vehicle_no_til"
+                        style="@style/AppTextField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="15"
+                        app:errorTextAppearance="@style/ErrorText">
+
+                        <EditText
+                            android:id="@+id/vehicle_no_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:fontFamily="@string/font_family_condensed"
+
+                            android:hint="@string/hint_enter_vehicle_no"
+                            android:inputType="text"
+                            android:maxLength="15"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textSize="@dimen/text_size_large" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <RadioGroup
+                        android:id="@+id/fuel_type_rg"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/petrol_rb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:text="@string/label_petrol"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_large" />
+
+                        <RadioButton
+                            android:id="@+id/diesel_rb"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:text="@string/label_diesel"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/text_size_large" />
+
+                    </RadioGroup>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/detail_ll"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/if_other_cb_ll"
+                    android:layout_marginBottom="2dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/qty_til"
+                        style="@style/AppTextField"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="2dp">
+
+                        <EditText
+                            android:id="@+id/qty_no_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:hint="@string/hint_enter_quantity_in_ltrs"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:singleLine="true"
+                            android:textSize="@dimen/text_size_large" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/meter_reading_til"
+                        style="@style/AppTextField"
+                        android:layout_width="match_parent"
+
+                        android:layout_height="wrap_content">
+
+                        <EditText
+                            android:id="@+id/meter_reading_et"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:fontFamily="@string/font_family_condensed"
+                            android:hint="@string/hint_enter_meter_reading"
+                            android:inputType="numberDecimal"
+                            android:maxLines="1"
+                            android:singleLine="true"
+
+                            android:textSize="@dimen/text_size_large" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+
+                <Button
+                    android:id="@+id/submit_mbtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/detail_ll"
+                    android:layout_marginBottom="4dp"
+                    android:background="@color/colorPrimary"
+
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="@string/btn_text_submit"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_large" />
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/detail_layout_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/card_info_tv"
+
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/font_family_condensed"
-                    android:text="@string/label_if_other"
                     android:textAlignment="center"
-                    android:textColor="@color/dark_grey"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+
+                    android:visibility="gone"
+                    tools:visibility="visible"
+
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="Transaction Detail"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large"
+                    android:textStyle="bold"
+
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="Registration No."
+                    android:textColor="@color/black"
                     android:textSize="@dimen/text_size_large"
 
                     />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/if_other_cb_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/ll_cb"
-                android:animateLayoutChanges="true"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/vehicle_no_til"
-                    style="@style/AppTextField"
+                <TextView
+                    android:id="@+id/reg_no_tv_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="15"
-                    app:errorTextAppearance="@style/ErrorText">
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
 
-                    <EditText
-                        android:id="@+id/vehicle_no_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:fontFamily="@string/font_family_condensed"
-
-                        android:hint="@string/hint_enter_vehicle_no"
-                        android:inputType="text"
-                        android:maxLength="15"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textSize="@dimen/text_size_large" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <RadioGroup
-                    android:id="@+id/fuel_type_rg"
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="Fuel Type"
 
-                    <RadioButton
-                        android:id="@+id/petrol_rb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:fontFamily="@string/font_family_condensed"
-                        android:text="@string/label_petrol"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large" />
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_large"
 
-                    <RadioButton
-                        android:id="@+id/diesel_rb"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@string/font_family_condensed"
-                        android:text="@string/label_diesel"
-                        android:textColor="@color/black"
-                        android:textSize="@dimen/text_size_large" />
+                    />
 
-                </RadioGroup>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/detail_ll"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/if_other_cb_ll"
-                android:layout_marginBottom="2dp"
-                android:orientation="vertical">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/qty_til"
-                    style="@style/AppTextField"
+                <TextView
+                    android:id="@+id/fuel_type_tv_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="2dp">
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
 
-                    <EditText
-                        android:id="@+id/qty_no_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:fontFamily="@string/font_family_condensed"
-                        android:hint="@string/hint_enter_quantity_in_ltrs"
-                        android:inputType="numberDecimal"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textSize="@dimen/text_size_large" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/meter_reading_til"
-                    style="@style/AppTextField"
+                <TextView
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="Quantiry(Ltrs.)"
+                    android:textColor="@color/black"
 
-                    android:layout_height="wrap_content">
+                    android:textSize="@dimen/text_size_large"
 
-                    <EditText
-                        android:id="@+id/meter_reading_et"
-                        android:layout_width="match_parent"
+                    />
+
+                <TextView
+                    android:id="@+id/quantity_tv_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="Meter Reading"
+                    android:textColor="@color/black"
+
+                    android:textSize="@dimen/text_size_large"
+
+                    />
+
+                <TextView
+                    android:id="@+id/meter_reading_tv_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textColor="@color/colorPrimary"
+
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Button
+                        android:id="@+id/print_btn"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:ems="10"
+                        android:layout_marginRight="2dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorPrimary"
                         android:fontFamily="@string/font_family_condensed"
-                        android:hint="@string/hint_enter_meter_reading"
-                        android:inputType="numberDecimal"
-                        android:maxLines="1"
-                        android:singleLine="true"
-
+                        android:text="Print"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
                         android:textSize="@dimen/text_size_large" />
-                </com.google.android.material.textfield.TextInputLayout>
 
+                    <Button
+                        android:id="@+id/exit_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_weight="1"
+                        android:background="@color/colorPrimary"
+                        android:fontFamily="@string/font_family_condensed"
+                        android:text="Exit"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/text_size_large" />
+                </LinearLayout>
             </LinearLayout>
 
-
-            <Button
-                android:id="@+id/submit_mbtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/detail_ll"
-                android:layout_marginBottom="4dp"
-                android:background="@color/colorPrimary"
-
-                android:fontFamily="@string/font_family_condensed"
-                android:text="@string/btn_text_submit"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_large" />
         </RelativeLayout>
-
-
-        <LinearLayout
-            android:id="@+id/detail_layout_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/card_info_tv"
-
-            android:orientation="vertical"
-            android:visibility="gone"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@string/font_family_condensed"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_large"
-                android:textStyle="bold"
-
-                android:visibility="gone"
-                tools:visibility="visible"
-
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@string/font_family_condensed"
-                android:text="Transaction Detail"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_large"
-                android:textStyle="bold"
-
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@string/font_family_condensed"
-                android:text="Registration No."
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_large"
-
-                />
-
-            <TextView
-                android:id="@+id/reg_no_tv_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@string/font_family_condensed"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@string/font_family_condensed"
-                android:text="Fuel Type"
-
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_large"
-
-                />
-
-            <TextView
-                android:id="@+id/fuel_type_tv_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@string/font_family_condensed"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@string/font_family_condensed"
-                android:text="Quantiry(Ltrs.)"
-                android:textColor="@color/black"
-
-                android:textSize="@dimen/text_size_large"
-
-                />
-
-            <TextView
-                android:id="@+id/quantity_tv_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@string/font_family_condensed"
-                android:textColor="@color/colorPrimary"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@string/font_family_condensed"
-                android:text="Meter Reading"
-                android:textColor="@color/black"
-
-                android:textSize="@dimen/text_size_large"
-
-                />
-
-            <TextView
-                android:id="@+id/meter_reading_tv_detail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@string/font_family_condensed"
-                android:textColor="@color/colorPrimary"
-
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <Button
-                    android:id="@+id/print_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="2dp"
-                    android:layout_marginBottom="4dp"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:fontFamily="@string/font_family_condensed"
-                    android:text="Print"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_large" />
-
-                <Button
-                    android:id="@+id/exit_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_weight="1"
-                    android:background="@color/colorPrimary"
-                    android:fontFamily="@string/font_family_condensed"
-                    android:text="Exit"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/text_size_large" />
-            </LinearLayout>
-        </LinearLayout>
-
-    </RelativeLayout>
-
+    </ScrollView>
     <!--<LinearLayout-->
     <!--android:id="@+id/btn_set_ll"-->
     <!--android:layout_width="match_parent"-->

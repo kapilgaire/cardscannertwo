@@ -1,5 +1,6 @@
 package com.example.cardscannertwo.util;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Color;
@@ -13,13 +14,15 @@ import com.example.cardscannertwo.R;
 
 public class CustomDialog {
 
-    ProgressDialog progressDialogMessage;
-
-    Context context;
+    private ProgressDialog progressDialogMessage;
+    private Context context;
+    private Activity mParentActivity;
 
     public CustomDialog(Context context) {
         progressDialogMessage = new ProgressDialog(context);
         this.context = context;
+        mParentActivity = (Activity)context;
+
 
     }
 
@@ -53,7 +56,7 @@ public class CustomDialog {
     }
 
     public void hideLoadingDialogWithMessage() {
-        if (progressDialogMessage != null && progressDialogMessage.isShowing()) {
+        if (progressDialogMessage != null && progressDialogMessage.isShowing() && !mParentActivity.isFinishing()) {
             progressDialogMessage.dismiss();
         }
     }

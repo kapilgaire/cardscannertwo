@@ -53,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         mCustomDialog = new CustomDialog(this);
 
 
-        getSiteDetails();
 
         submit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getSiteDetails();
 
     }
 
