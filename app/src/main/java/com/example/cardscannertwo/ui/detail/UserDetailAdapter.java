@@ -62,7 +62,7 @@ public class UserDetailAdapter extends RecyclerView.Adapter<UserDetailAdapter.Da
 
         } else {
             holder.user_info_tv.setBackgroundColor(context.getResources().getColor(R.color.white));
-            holder.user_info_tv.setTextColor((context.getResources().getColor(R.color.black)));
+            holder.user_info_tv.setTextColor((context.getResources().getColor(R.color.dark_grey)));
         }
 
 

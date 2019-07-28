@@ -1,9 +1,9 @@
 package com.example.cardscannertwo.ui.report;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -45,8 +45,10 @@ public class ReportActivity extends AppCompatActivity {
     private TextView totalPetrolTv;
 
     //    private Button homeBtn;
-private TextView fuelTypeTwoTv;
+    private TextView fuelTypeTwoTv;
 
+    private LinearLayout noDataLl;
+    private LinearLayout dataLayoutLl;
 
 
     @Override
@@ -88,13 +90,15 @@ private TextView fuelTypeTwoTv;
         headerLl = findViewById(R.id.header_ll);
         reportListRv = findViewById(R.id.report_list_rv);
         report_list_diesel_rv = findViewById(R.id.report_list_diesel_rv);
-        fuelTypeTwoTv =  findViewById(R.id.fuel_type_two_tv);
+        fuelTypeTwoTv = findViewById(R.id.fuel_type_two_tv);
 
         fuelTypeTv = findViewById(R.id.fuel_type_tv);
         totalTv = findViewById(R.id.total_tv);
 //        homeBtn = findViewById(R.id.home_btn);
+        noDataLl = findViewById(R.id.no_data_ll);
 
-        totalPetrolTv =  findViewById(R.id.total_petrol_tv);
+        totalPetrolTv = findViewById(R.id.total_petrol_tv);
+        dataLayoutLl = findViewById(R.id.data_layout_ll);
 
     }
 
@@ -111,14 +115,16 @@ private TextView fuelTypeTwoTv;
                             ArrayList<ReportDetails> reportDetailsArrayList = response.body();
 
 
-
                             if (reportDetailsArrayList != null) {
                                 if (reportDetailsArrayList.size() > 0) {
                                     String msg = reportDetailsArrayList.get(0).getErrorMessage();
 
                                     if (msg == null) {
 
-                                        String deisel ="0", petrol="0";
+                                        showDataLayot();
+                                        hideNoDataLayot();
+
+                                        String deisel = "0", petrol = "0";
                                         for (ReportDetails rd : reportDetailsArrayList) {
                                             if (rd.getFuelType().equalsIgnoreCase("Petrol")) {
                                                 mReportDetailAdapter.add(rd);
@@ -149,15 +155,20 @@ private TextView fuelTypeTwoTv;
                                         totalPetrolTv.setText(petrol);
 
 
-
                                     } else {
 
+                                        showNoDataLayot();
+                                        hideDataLayot();
 
                                         Toaster.show(ReportActivity.this, msg);
 
                                     }
                                 } else {
                                     Toaster.show(ReportActivity.this, "No Report Available");
+
+                                    showNoDataLayot();
+                                    hideDataLayot();
+
 
                                 }
                             }
@@ -195,6 +206,37 @@ private TextView fuelTypeTwoTv;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void hideDataLayot() {
+        if (dataLayoutLl.getVisibility() == View.VISIBLE) {
+            dataLayoutLl.setVisibility(View.GONE);
+        }
+
+    }
+
+
+    private void showDataLayot() {
+        if (dataLayoutLl.getVisibility() == View.GONE) {
+            dataLayoutLl.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+
+    private void hideNoDataLayot() {
+        if (noDataLl.getVisibility() == View.VISIBLE) {
+            noDataLl.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void showNoDataLayot() {
+        if (noDataLl.getVisibility() == View.GONE) {
+            noDataLl.setVisibility(View.VISIBLE);
+        }
+
     }
 
 }

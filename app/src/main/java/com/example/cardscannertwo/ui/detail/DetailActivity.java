@@ -1,25 +1,28 @@
 package com.example.cardscannertwo.ui.detail;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,29 +31,32 @@ import com.example.cardscannertwo.data.remote.ApiClient;
 import com.example.cardscannertwo.data.request.RequestBuilder;
 import com.example.cardscannertwo.data.response.CardDetails;
 import com.example.cardscannertwo.data.response.SuccessResponse;
-import com.example.cardscannertwo.data.response.TransactionDetails;
 import com.example.cardscannertwo.util.AppUtil;
 import com.example.cardscannertwo.util.CustomDialog;
 import com.example.cardscannertwo.util.ErrorUtil;
 import com.example.cardscannertwo.util.SharedPrefUtil;
-import com.example.cardscannertwo.util.SimpleDividerItemDecoration;
 import com.example.cardscannertwo.util.Toaster;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DetailActivity extends AppCompatActivity {
+
+    public static final int TIMER = 20000;
     private Toolbar toolbar;
     private ArrayList<CardDetails> cardDetailsList;
 
     private TextView cardInfoTv;
+    private RelativeLayout formLayoutRl;
     private RecyclerView vehicleListRv;
     private CheckBox ifOtherCb;
+    private LinearLayout ifOtherCbLl;
     private TextInputLayout vehicleNoTil;
     private EditText vehicleNoEt;
     private RadioGroup fuelTypeRg;
@@ -61,14 +67,26 @@ public class DetailActivity extends AppCompatActivity {
     private TextInputLayout meterReadingTil;
     private EditText meterReadingEt;
     private Button submitMbtn;
-    private LinearLayout ifOtherCbLl;
-    private RecyclerView fuelTransactionListRv;
+    private LinearLayout detailLayoutLl;
+    private TextView regNoTvDetail;
+    private TextView fuelTypeTvDetail;
+    private TextView quantityTvDetail;
+    private TextView meterReadingTvDetail;
 
-    private Button reportBtn;
+    private FrameLayout parentFl;
+
+    private LinearLayout llCb;
+
+
+
+
+//    private RecyclerView fuelTransactionListRv;
+
+//    private Button reportBtn;
 
 
     private UserDetailAdapter mUserDetailAdapter;
-    private TransactionAdapter mTransactionAdapter;
+//    private TransactionAdapter mTransactionAdapter;
 
     private static final String TAG = "DetailActivity";
 
@@ -79,6 +97,10 @@ public class DetailActivity extends AppCompatActivity {
     private CustomDialog mCustomDialog;
 //    private Button homeBtn;
 
+    private Button printBtn;
+    private Button exitBtn;
+    private CountDownTimer countDownTimer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,16 +109,16 @@ public class DetailActivity extends AppCompatActivity {
         cardDetailsList = getIntent().getParcelableArrayListExtra("CARD_DETAIL_LIST");
 
         initViews();
-        toolbar.setTitle(AppUtil.setTypeFaceToolbar(cardDetailsList.get(0).getCardsNO()));
+//        toolbar.setTitle(AppUtil.setTypeFaceToolbar(cardDetailsList.get(0).getCardsNO()));
         setSupportActionBar(toolbar);
 
         initListener();
         mUserDetailAdapter = new UserDetailAdapter(this);
         mCustomDialog = new CustomDialog(this);
-        mTransactionAdapter = new TransactionAdapter(this);
-        fuelTransactionListRv.setLayoutManager(new LinearLayoutManager(this));
-        fuelTransactionListRv.setAdapter(mTransactionAdapter);
-        fuelTransactionListRv.addItemDecoration(new SimpleDividerItemDecoration(this, DividerItemDecoration.VERTICAL, 0));
+//        mTransactionAdapter = new TransactionAdapter(this);
+//        fuelTransactionListRv.setLayoutManager(new LinearLayoutManager(this));
+//        fuelTransactionListRv.setAdapter(mTransactionAdapter);
+//        fuelTransactionListRv.addItemDecoration(new SimpleDividerItemDecoration(this, DividerItemDecoration.VERTICAL, 0));
 
 
         setUpRecyclerView(cardDetailsList);
@@ -104,8 +126,13 @@ public class DetailActivity extends AppCompatActivity {
 
         updateView(cardDetailsList);
 
-        getFuelDetail();
+//        getFuelDetail();
 
+
+        showFormLayot();
+        hideDetailLayot();
+
+        startTimer(TIMER);
     }
 
 
@@ -124,6 +151,7 @@ public class DetailActivity extends AppCompatActivity {
     UserDetailAdapter.UserDetailAdapterListener mUserDetailAdapterListener = new UserDetailAdapter.UserDetailAdapterListener() {
         @Override
         public void onSelected(CardDetails cardDetails) {
+            resetTimer();
 
             cardNo = cardDetails.getCardsNO();
             fuelType = cardDetails.getFuelType();
@@ -141,11 +169,21 @@ public class DetailActivity extends AppCompatActivity {
 
             switch (buttonView.getId()) {
                 case R.id.if_other_cb:
+
                     if (isChecked) {
                         mUserDetailAdapter.setRow_index(-1);
                         ifOtherCbLl.setVisibility(View.VISIBLE);
+                        resetTimer();
+                        llCb.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+                        ifOtherCb.setTextColor(getResources().getColor(R.color.white));
+
                     } else {
+
+                        llCb.setBackgroundColor(getResources().getColor(R.color.white));
+                        ifOtherCb.setTextColor((getResources().getColor(R.color.dark_grey)));
                         ifOtherCbLl.setVisibility(View.GONE);
+                        resetTimer();
+
                     }
                     break;
             }
@@ -159,6 +197,13 @@ public class DetailActivity extends AppCompatActivity {
             switch (v.getId()) {
                 case R.id.submit_mbtn:
                     submit();
+                    resetTimer();
+
+                    break;
+
+                case R.id.exit_btn:
+                    AppUtil.goToHome(DetailActivity.this);
+                    stopCountdown();
                     break;
 //                case R.id.report_btn:
 //
@@ -180,6 +225,7 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            resetTimer();
 
         }
 
@@ -198,6 +244,7 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            resetTimer();
 
         }
 
@@ -216,6 +263,7 @@ public class DetailActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            resetTimer();
 
         }
 
@@ -233,15 +281,42 @@ public class DetailActivity extends AppCompatActivity {
         vehicleNoEt.addTextChangedListener(mVehicleTextWatcher);
         qtyNoEt.addTextChangedListener(mQtyTextWatcher);
         meterReadingEt.addTextChangedListener(mMeterTextWatcher);
+
+        printBtn.setOnClickListener(mOnClickListener);
+        exitBtn.setOnClickListener(mOnClickListener);
+
+
+        parentFl.setOnTouchListener(mOnTouchListener);
 //        reportBtn.setOnClickListener(mOnClickListener);
 //        homeBtn.setOnClickListener(mOnClickListener);
     }
 
+    View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+
+            Log.e(TAG, "touch x,y == " + event.getX() + "," + event.getY());
+            resetTimer();
+            return true;
+        }
+
+    };
+
+    private void resetTimer() {
+        stopCountdown();
+        startTimer(TIMER);
+    }
+
     private void initViews() {
+        parentFl = findViewById(R.id.parent_fl);
+        llCb =  findViewById(R.id.ll_cb);
+
         toolbar = findViewById(R.id.toolbar);
         cardInfoTv = findViewById(R.id.card_info_tv);
+        formLayoutRl = findViewById(R.id.form_layout_rl);
         vehicleListRv = findViewById(R.id.vehicle_list_rv);
         ifOtherCb = findViewById(R.id.if_other_cb);
+        ifOtherCbLl = findViewById(R.id.if_other_cb_ll);
         vehicleNoTil = findViewById(R.id.vehicle_no_til);
         vehicleNoEt = findViewById(R.id.vehicle_no_et);
         fuelTypeRg = findViewById(R.id.fuel_type_rg);
@@ -252,10 +327,13 @@ public class DetailActivity extends AppCompatActivity {
         meterReadingTil = findViewById(R.id.meter_reading_til);
         meterReadingEt = findViewById(R.id.meter_reading_et);
         submitMbtn = findViewById(R.id.submit_mbtn);
-        ifOtherCbLl = findViewById(R.id.if_other_cb_ll);
-        fuelTransactionListRv = findViewById(R.id.fuel_transaction_list_rv);
-        reportBtn = findViewById(R.id.report_btn);
-//        homeBtn = findViewById(R.id.home_btn);
+        detailLayoutLl = findViewById(R.id.detail_layout_ll);
+        regNoTvDetail = findViewById(R.id.reg_no_tv_detail);
+        fuelTypeTvDetail = findViewById(R.id.fuel_type_tv_detail);
+        quantityTvDetail = findViewById(R.id.quantity_tv_detail);
+        meterReadingTvDetail = findViewById(R.id.meter_reading_tv_detail);
+        printBtn = findViewById(R.id.print_btn);
+        exitBtn = findViewById(R.id.exit_btn);
 
     }
 
@@ -264,7 +342,7 @@ public class DetailActivity extends AppCompatActivity {
         if (cardDetailsList != null) {
             if (cardDetailsList.size() > 0) {
 
-                cardInfoTv.setText(cardDetailsList.get(0).getFullName() + " / " + cardDetailsList.get(0).getCardsNO());
+                cardInfoTv.setText(cardDetailsList.get(0).getFullName() + " \n " + cardDetailsList.get(0).getCardsNO());
             }
         }
     }
@@ -325,8 +403,9 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    private void save(String meterReading, String quantity, String cardNo, String fuelType, String registrationNo, String ifOther) {
+    private void save(final String meterReading, final String quantity, final String cardNo, final String fuelType, final String registrationNo, String ifOther) {
 
+        resetTimer();
 
         mCustomDialog.showLoadingDialogWithMessage("Saving...");
 
@@ -347,6 +426,8 @@ public class DetailActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<SuccessResponse> call, Response<SuccessResponse> response) {
                 mCustomDialog.hideLoadingDialogWithMessage();
+                resetTimer();
+
                 if (response.code() == 200) {
 
                     SuccessResponse successResponse = response.body();
@@ -359,15 +440,22 @@ public class DetailActivity extends AppCompatActivity {
                             vehicleNoEt.setText("");
 
                             /*hide after submit folrm*/
-                            mUserDetailAdapter.clear();
-                            ifOtherCbLl.setVisibility(View.GONE);
-                            ifOtherCb.setVisibility(View.GONE);
-                            qtyTil.setVisibility(View.GONE);
-                            meterReadingTil.setVisibility(View.GONE);
-                            submitMbtn.setVisibility(View.GONE);
+//                            mUserDetailAdapter.clear();
+//                            ifOtherCbLl.setVisibility(View.GONE);
+//                            ifOtherCb.setVisibility(View.GONE);
+//                            qtyTil.setVisibility(View.GONE);
+//                            meterReadingTil.setVisibility(View.GONE);
+//                            submitMbtn.setVisibility(View.GONE);
 
+
+                            hideFormLayot();
+                            showDetailLayot();
+
+                            updateDetaillayout(registrationNo, fuelType, quantity, meterReading);
                             AppUtil.hideKeyboard(DetailActivity.this);
-                            getFuelDetail();
+
+
+//                            getFuelDetail();
                         } else {
                             Toaster.show(DetailActivity.this, successResponse.getMessage());
 
@@ -382,60 +470,69 @@ public class DetailActivity extends AppCompatActivity {
             public void onFailure(Call<SuccessResponse> call, Throwable t) {
                 mCustomDialog.hideLoadingDialogWithMessage();
                 ErrorUtil.showErrorView(t, DetailActivity.this);
+                resetTimer();
 
 
             }
         });
     }
 
-    private void getFuelDetail() {
+    private void updateDetaillayout(String registrationNo, String fuelType, String quantity, String meterReading) {
 
-        ApiClient.getApiClient().getCardFuelDetails(cardDetailsList.get(0).getCardsNO(),
-                SharedPrefUtil.getString(DetailActivity.this, "HONDA_PREF", "KEY"),
-                SharedPrefUtil.getString(DetailActivity.this, "HONDA_PREF", "SITE_NAME")).enqueue(new Callback<ArrayList<TransactionDetails>>() {
-            @Override
-            public void onResponse(Call<ArrayList<TransactionDetails>> call, Response<ArrayList<TransactionDetails>> response) {
-                mCustomDialog.hideLoadingDialogWithMessage();
-                if (response.code() == 200) {
-                    ArrayList<TransactionDetails> transactionDetailList = response.body();
+        regNoTvDetail.setText(registrationNo);
+        fuelTypeTvDetail.setText(fuelType);
+        quantityTvDetail.setText(quantity);
+        meterReadingTvDetail.setText(meterReading);
+    }
 
-                    if (transactionDetailList != null) {
-                        if (transactionDetailList.size() > 0) {
-                            String msg = transactionDetailList.get(0).getErrorMessage();
-
-                            if (msg == null) {
-
-                                mTransactionAdapter.clear();
-                                mTransactionAdapter.addAll(transactionDetailList);
+//    private void getFuelDetail() {
 //
-                            } else {
-
-
-                                Toaster.show(DetailActivity.this, msg);
-
-                            }
-                        } else {
-
-                            ifOtherCb.setChecked(true);
-                            //no Fuel transaction
-                        }
-                    }
-
-
-                } else {
-                    Toaster.show(DetailActivity.this, String.valueOf(response.code()));
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<TransactionDetails>> call, Throwable t) {
-                mCustomDialog.hideLoadingDialogWithMessage();
-                ErrorUtil.showErrorView(t, DetailActivity.this);
-
-            }
-        });
-    }
+//        ApiClient.getApiClient().getCardFuelDetails(cardDetailsList.get(0).getCardsNO(),
+//                SharedPrefUtil.getString(DetailActivity.this, "HONDA_PREF", "KEY"),
+//                SharedPrefUtil.getString(DetailActivity.this, "HONDA_PREF", "SITE_NAME")).enqueue(new Callback<ArrayList<TransactionDetails>>() {
+//            @Override
+//            public void onResponse(Call<ArrayList<TransactionDetails>> call, Response<ArrayList<TransactionDetails>> response) {
+//                mCustomDialog.hideLoadingDialogWithMessage();
+//                if (response.code() == 200) {
+//                    ArrayList<TransactionDetails> transactionDetailList = response.body();
+//
+//                    if (transactionDetailList != null) {
+//                        if (transactionDetailList.size() > 0) {
+//                            String msg = transactionDetailList.get(0).getErrorMessage();
+//
+//                            if (msg == null) {
+//
+//                                mTransactionAdapter.clear();
+//                                mTransactionAdapter.addAll(transactionDetailList);
+////
+//                            } else {
+//
+//
+//                                Toaster.show(DetailActivity.this, msg);
+//
+//                            }
+//                        } else {
+//
+//                            ifOtherCb.setChecked(true);
+//                            //no Fuel transaction
+//                        }
+//                    }
+//
+//
+//                } else {
+//                    Toaster.show(DetailActivity.this, String.valueOf(response.code()));
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ArrayList<TransactionDetails>> call, Throwable t) {
+//                mCustomDialog.hideLoadingDialogWithMessage();
+//                ErrorUtil.showErrorView(t, DetailActivity.this);
+//
+//            }
+//        });
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -450,10 +547,78 @@ public class DetailActivity extends AppCompatActivity {
         //Functionality if we press back button
         if (id == R.id.action_home) {
             AppUtil.goToHome(DetailActivity.this);
+            stopCountdown();
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    private void hideFormLayot() {
+        if (formLayoutRl.getVisibility() == View.VISIBLE) {
+            formLayoutRl.setVisibility(View.GONE);
+        }
+
+    }
+
+
+    private void showFormLayot() {
+        if (formLayoutRl.getVisibility() == View.GONE) {
+            formLayoutRl.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+
+    private void hideDetailLayot() {
+        if (detailLayoutLl.getVisibility() == View.VISIBLE) {
+            detailLayoutLl.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void showDetailLayot() {
+        if (detailLayoutLl.getVisibility() == View.GONE) {
+            detailLayoutLl.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+
+    //Stop Countdown method
+    private void stopCountdown() {
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+            countDownTimer = null;
+        }
+    }
+
+    //Start Countodwn method
+    private void startTimer(int noOfMinutes) {
+        countDownTimer = new CountDownTimer(noOfMinutes, 1000) {
+            public void onTick(long millisUntilFinished) {
+                long millis = millisUntilFinished;
+                //Convert milliseconds into hour,minute and seconds
+                String hms = String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(millis), TimeUnit.MILLISECONDS.toMinutes(millis) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(millis)), TimeUnit.MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(millis)));
+                Log.e(TAG, "onTick: " + hms);
+            }
+
+            public void onFinish() {
+                Log.e(TAG, "onTick: " + "TIME'S UP!!");
+
+                countDownTimer = null;//set CountDownTimer to null
+
+                AppUtil.goToHome(DetailActivity.this);
+            }
+        }.start();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        stopCountdown();
+
+    }
 }

@@ -9,174 +9,212 @@
     tools:context="com.example.cardscannertwo.ui.report.ReportActivity"
     tools:showIn="@layout/activity_report">
 
-    <LinearLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/site_name_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@string/font_family_condensed"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_large"
-
-            />
-
-        <TextView
-            android:id="@+id/fuel_type_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@string/font_family_condensed"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_large"
-
-
-            />
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/header_ll"
+            android:id="@+id/no_data_ll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/grey"
-            android:orientation="horizontal"
-            android:padding="4dp"
-            android:weightSum="3">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_report" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/rectangular_right_line"
                 android:fontFamily="@string/font_family_condensed"
-                android:text="@string/label_username"
+                android:text="No Report Available"
                 android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
+                android:textColor="#928E8E"
+                android:textSize="@dimen/text_size_large"
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/rectangular_right_line"
-                android:fontFamily="@string/font_family_condensed"
-                android:text="@string/label_registration_no"
-                android:textAlignment="center"
-
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@string/font_family_condensed"
-                android:text="@string/label_qty_litres"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
-        </LinearLayout>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/report_list_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </androidx.recyclerview.widget.RecyclerView>
-        <LinearLayout
-            android:id="@+id/footer_petrol_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/grey"
-            android:orientation="horizontal"
-            android:padding="4dp"
-            android:weightSum="3">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:background="@drawable/rectangular_right_line"
-                android:fontFamily="@string/font_family_condensed"
-                android:text="@string/label_total"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium" />
-
-
-            <TextView
-                android:id="@+id/total_petrol_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@string/font_family_condensed"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
-
-
-        </LinearLayout>
-        <TextView
-            android:id="@+id/fuel_type_two_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@string/font_family_condensed"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_large"
-
-
-            />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/report_list_diesel_rv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </androidx.recyclerview.widget.RecyclerView>
-
-        <LinearLayout
-            android:id="@+id/footer_ll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/grey"
-            android:orientation="horizontal"
-            android:padding="4dp"
-            android:weightSum="3">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:background="@drawable/rectangular_right_line"
-                android:fontFamily="@string/font_family_condensed"
-                android:text="@string/label_total"
-                android:textStyle="bold"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium" />
-
-
-            <TextView
-                android:id="@+id/total_tv"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@string/font_family_condensed"
-                android:textAlignment="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold" />
-
+                />
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/data_layout_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
 
-    </LinearLayout>
+
+            <TextView
+                android:id="@+id/site_name_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/font_family_condensed"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+
+                />
+
+            <TextView
+                android:id="@+id/fuel_type_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/font_family_condensed"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+
+
+                />
+
+            <LinearLayout
+                android:id="@+id/header_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:weightSum="3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangular_right_line"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="@string/label_username"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/rectangular_right_line"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="@string/label_registration_no"
+                    android:textAlignment="center"
+
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="@string/label_qty_litres"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/report_list_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <LinearLayout
+                android:id="@+id/footer_petrol_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:weightSum="3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@drawable/rectangular_right_line"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="@string/label_total"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/total_petrol_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/fuel_type_two_tv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/font_family_condensed"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_large"
+
+
+                />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/report_list_diesel_rv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <LinearLayout
+                android:id="@+id/footer_ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/grey"
+                android:orientation="horizontal"
+                android:padding="4dp"
+                android:weightSum="3">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:background="@drawable/rectangular_right_line"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:text="@string/label_total"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/total_tv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@string/font_family_condensed"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </FrameLayout>
 </androidx.core.widget.NestedScrollView>
