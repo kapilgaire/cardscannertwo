@@ -25,6 +25,8 @@ import com.example.cardscannertwo.util.SimpleDividerItemDecoration;
 import com.example.cardscannertwo.util.Toaster;
 import com.google.gson.Gson;
 
+
+
 import java.util.ArrayList;
 
 import retrofit2.Call;

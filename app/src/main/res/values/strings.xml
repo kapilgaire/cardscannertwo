@@ -36,5 +36,20 @@
     <string name="label_submit">Submit</string>
     <string name="label_by">by</string>
 
+    <string name="open_nfc">OPEN NFC</string>
+    <string name="no_nfc">No NFC</string>
+
+
+    <string name="printNormal">The printer is working normally.</string>
+    <string name="printLackofpaper">The printer is out of paper</string>
+    <string name="printOverpressure">The printer is overvoltage.</string>
+    <string name="printOverheating">The printer is overheated.</string>
+    <string name="printPressureaxisopen">Printer shaft open</string>
+    <string name="printPaperstuck">Printer paper stuck</string>
+    <string name="printSlicingerror">Printer cutting error</string>
+    <string name="printPaperfinish">Printer paper used up</string>
+    <string name="printCancelpaper">User doesnot get paper</string>
+    <string name="printLeisure">Printer available.</string>
+    <string name="printUnleisure">The printer data is full.</string>
 
 </resources>

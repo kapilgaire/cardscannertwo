@@ -10,5 +10,9 @@ public class CardScanner extends Application {
     public void onCreate() {
         super.onCreate();
         CrashReporter.initialize(this);
+
     }
+
+
+
 }

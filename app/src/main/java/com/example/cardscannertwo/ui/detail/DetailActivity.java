@@ -1,5 +1,6 @@
 package com.example.cardscannertwo.ui.detail;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
@@ -20,6 +21,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -38,6 +40,8 @@ import com.example.cardscannertwo.util.SharedPrefUtil;
 import com.example.cardscannertwo.util.Toaster;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.gson.Gson;
+import com.rscja.deviceapi.Printer;
+import com.rscja.deviceapi.exception.ConfigurationException;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -78,15 +82,7 @@ public class DetailActivity extends AppCompatActivity {
     private LinearLayout llCb;
 
 
-
-
-//    private RecyclerView fuelTransactionListRv;
-
-//    private Button reportBtn;
-
-
     private UserDetailAdapter mUserDetailAdapter;
-//    private TransactionAdapter mTransactionAdapter;
 
     private static final String TAG = "DetailActivity";
 
@@ -95,18 +91,45 @@ public class DetailActivity extends AppCompatActivity {
     private String registrationNo = null;
 
     private CustomDialog mCustomDialog;
-//    private Button homeBtn;
 
     private Button printBtn;
     private Button exitBtn;
     private CountDownTimer countDownTimer;
 
 
+    /*printer*/
+    boolean isLeisure = true;
+    boolean isLackofpaper = false;
+    boolean isNORMAL = true;
+    public boolean runing = false;
+    public Printer mPrinter;
+    public int leftMargin = 0;
+    public int rightMargin = 0;
+    public int rowSpacing = 33;
+
+    public boolean isItalic = false;
+    public boolean isFrame = false;
+    public boolean isBold = false;
+    public boolean isdoubleWidth = false;
+    public boolean isDoubleHigh = false;
+    public boolean isUnderline = false;
+    public boolean isWhite = false;
+
+    public int speed = 1;
+    public int gray = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         cardDetailsList = getIntent().getParcelableArrayListExtra("CARD_DETAIL_LIST");
+
+        try {
+            mPrinter = Printer.getInstance();
+        } catch (ConfigurationException e) {
+            e.printStackTrace();
+        }
+        mPrinter.setPrinterStatusCallBack(new CallBack());
 
         initViews();
 //        toolbar.setTitle(AppUtil.setTypeFaceToolbar(cardDetailsList.get(0).getCardsNO()));
@@ -135,6 +158,29 @@ public class DetailActivity extends AppCompatActivity {
         startTimer(TIMER);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (mPrinter != null) {
+            mPrinter.free();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new InitTask().execute();
+
+        mPrinter.setPrinterStatusCallBackEnable(true);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPrinter.clearCache();
+    }
 
     private void setUpRecyclerView(ArrayList<CardDetails> cardDetailsList) {
 
@@ -204,6 +250,10 @@ public class DetailActivity extends AppCompatActivity {
                     AppUtil.goToHome(DetailActivity.this);
                     stopCountdown();
                     break;
+                case R.id.print_btn:
+
+                    break;
+
 //                case R.id.report_btn:
 //
 //                    Intent intent = new Intent(DetailActivity.this, ReportActivity.class);
@@ -313,7 +363,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void initViews() {
         parentFl = findViewById(R.id.parent_fl);
-        llCb =  findViewById(R.id.ll_cb);
+        llCb = findViewById(R.id.ll_cb);
 
         toolbar = findViewById(R.id.toolbar);
         cardInfoTv = findViewById(R.id.card_info_tv);
@@ -623,6 +673,142 @@ public class DetailActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         stopCountdown();
+
+    }
+
+    class AutoPrinter extends Thread {
+        boolean isContinuous = false;
+        String data = "";
+        int size = 50;
+
+        private AutoPrinter(String data, boolean isContinuous) {
+            this.isContinuous = isContinuous;
+            this.data = data;
+        }
+
+        public void run() {
+            mPrinter.clearCache();
+            do {
+                for (int k = 0; (k < data.length()) && runing; ) {
+                    if (isLeisure) {
+                        int flagDataLen = data.length() - k;
+                        int Statr = k;
+                        int end = flagDataLen > size ? k + size : k + flagDataLen;
+                        k = end;
+                        String temp = data.substring(Statr, end);
+                        mPrinter.print(temp);
+                    }
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            while (runing && isContinuous);
+            printFeed();
+            runing = false;
+        }
+    }
+
+    class CallBack implements Printer.PrinterStatusCallBack {
+        @Override
+        public void message(Printer.PrinterStatus infoCode) {
+            switch (infoCode) {
+                case NORMAL:
+                    if (isLackofpaper)
+                        setMeg(getString(R.string.printNormal));
+                    isLackofpaper = false;
+                    isNORMAL = true;
+                    break;
+                case OVERPRESSURE:
+                    isNORMAL = false;
+                    setMeg(getString(R.string.printOverpressure));
+                    break;
+                case LACKOFPAPER:
+                    isNORMAL = false;
+                    isLackofpaper = true;
+                    setMeg(getString(R.string.printLackofpaper));
+                    break;
+                case OVERHEATING://过热
+                    isNORMAL = false;
+                    setMeg(getString(R.string.printOverheating));
+                    break;
+                case PRESSUREAXISOPEN:
+                    isNORMAL = false;
+                    setMeg(getString(R.string.printPressureaxisopen));
+                    break;
+                case PAPERSTUCK:
+                    isNORMAL = false;
+                    setMeg(getString(R.string.printPaperstuck));
+                    break;
+                case SLICINGERROR:
+                    isNORMAL = false;
+                    setMeg(getString(R.string.printSlicingerror));
+                    break;
+                case PAPERFINISH:
+                    isNORMAL = false;
+                    setMeg(getString(R.string.printPaperfinish));
+                    break;
+                case CANCELPAPER:
+                    isNORMAL = false;
+                    setMeg(getString(R.string.printCancelpaper));
+                    break;
+                case LEISURE:
+                    isLeisure = true;
+                    setMeg(getString(R.string.printLeisure));
+                    break;
+                case UNLEISURED:
+                    isNORMAL = false;
+                    isLeisure = false;
+                    setMeg(getString(R.string.printUnleisure));
+                    break;
+            }
+        }
+    }
+
+    private void setMeg(String msg) {
+        Toaster.show(getApplicationContext(), msg);
+    }
+
+    public void printFeed() {
+        mPrinter.setPrintRowSpacing(33);
+        mPrinter.setFeedRow(2);
+        mPrinter.setPrintRowSpacing(rowSpacing);
+    }
+
+    public void initParameter() {
+        mPrinter.setPrintRowSpacing(rowSpacing);
+        mPrinter.setPrintLeftMargin(leftMargin);
+        mPrinter.setPrintRightMargin(rightMargin);
+        mPrinter.setPrintGrayLevel(gray + 1);
+        mPrinter.setPrintSpeed(speed);
+        mPrinter.setPrintCharacterStyle(isItalic, isFrame, isBold, isdoubleWidth, isDoubleHigh, isWhite, isUnderline);
+    }
+
+    public class InitTask extends AsyncTask<String, Integer, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... params) {
+            // TODO Auto-generated method stub
+            return mPrinter.init();
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            if (!result) {
+                Toast.makeText(DetailActivity.this, "Printer fail",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(DetailActivity.this, "Printer init success", Toast.LENGTH_SHORT).show();
+                initParameter();
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
 
     }
 }
