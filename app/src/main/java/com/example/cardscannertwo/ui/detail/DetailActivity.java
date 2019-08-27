@@ -155,7 +155,7 @@ public class DetailActivity extends AppCompatActivity {
         showFormLayot();
         hideDetailLayot();
 
-        startTimer(TIMER);
+//        startTimer(TIMER);
     }
 
     @Override
@@ -251,6 +251,19 @@ public class DetailActivity extends AppCompatActivity {
                     stopCountdown();
                     break;
                 case R.id.print_btn:
+                    runing=true;
+
+                    StringBuilder sb1 = new StringBuilder();
+                    sb1.append("            ").append(cardDetailsList.get(0).getFullName()).append("      \r\n");
+                    sb1.append("            ").append(cardDetailsList.get(0).getCardsNO()).append("      \r\n");
+                    sb1.append("        Transaction Details      \r\n");
+                    sb1.append("Registration no.      ").append(regNoTvDetail.getText().toString()).append("\r\n");
+                    sb1.append("Fuel Type             ").append(fuelTypeTvDetail.getText().toString()).append("\r\n");
+                    sb1.append("Quantity(ltrs.)       ").append(quantityTvDetail.getText().toString()).append("\r\n");
+                    sb1.append("Meter Reading         ").append(meterReadingTvDetail.getText().toString()).append("\r\n");
+
+                    Log.e(TAG,"printer "+ sb1);
+                    new AutoPrinter(sb1.toString(),false).start();
 
                     break;
 
@@ -358,7 +371,7 @@ public class DetailActivity extends AppCompatActivity {
 
     private void resetTimer() {
         stopCountdown();
-        startTimer(TIMER);
+//        startTimer(TIMER);
     }
 
     private void initViews() {
@@ -649,7 +662,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     //Start Countodwn method
-    private void startTimer(int noOfMinutes) {
+    /*private void startTimer(int noOfMinutes) {
         countDownTimer = new CountDownTimer(noOfMinutes, 1000) {
             public void onTick(long millisUntilFinished) {
                 long millis = millisUntilFinished;
@@ -668,7 +681,7 @@ public class DetailActivity extends AppCompatActivity {
         }.start();
 
     }
-
+*/
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -689,13 +702,21 @@ public class DetailActivity extends AppCompatActivity {
         public void run() {
             mPrinter.clearCache();
             do {
+                Log.e(TAG, "data "+ data);
                 for (int k = 0; (k < data.length()) && runing; ) {
+                    Log.e(TAG,"runing"+runing
+                            +"  isLeisure="+isLeisure
+                            +"  data.leng="+data.length() +"  k="+k);
+
                     if (isLeisure) {
                         int flagDataLen = data.length() - k;
                         int Statr = k;
                         int end = flagDataLen > size ? k + size : k + flagDataLen;
                         k = end;
+
+
                         String temp = data.substring(Statr, end);
+                        Log.e(TAG, "auto printer "+ temp);
                         mPrinter.print(temp);
                     }
                     try {

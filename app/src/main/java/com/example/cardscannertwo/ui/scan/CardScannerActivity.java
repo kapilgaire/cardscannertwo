@@ -8,7 +8,6 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.IsoDep;
 import android.nfc.tech.MifareClassic;
-import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,22 +21,18 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
 import com.example.cardscannertwo.R;
 import com.example.cardscannertwo.data.remote.ApiClient;
 import com.example.cardscannertwo.data.response.CardDetails;
-import com.example.cardscannertwo.mifare.MifareBlock;
-import com.example.cardscannertwo.mifare.MifareClassCard;
-import com.example.cardscannertwo.mifare.MifareSector;
-import com.example.cardscannertwo.mifare.StringUtils;
 import com.example.cardscannertwo.ui.detail.DetailActivity;
 import com.example.cardscannertwo.ui.report.ReportActivity;
+import com.example.cardscannertwo.util.AppUtil;
 import com.example.cardscannertwo.util.CustomDialog;
 import com.example.cardscannertwo.util.ErrorUtil;
 import com.example.cardscannertwo.util.SharedPrefUtil;
+import com.example.cardscannertwo.util.StringUtils;
 import com.example.cardscannertwo.util.Toaster;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -88,7 +83,7 @@ public class CardScannerActivity extends AppCompatActivity {
             return;
         }
 
-        Log.e(TAG, " NFC " + String.valueOf(nfcAdapter.isEnabled()));
+
         setContentView(R.layout.activity_scan);
 
 
@@ -135,7 +130,7 @@ public class CardScannerActivity extends AppCompatActivity {
         if (isFirst) {
             if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(getIntent().getAction())) {
                 String result = processIntent(getIntent());
-//                editText.setText(result);
+                editText.setText(result);
 
                 Log.e(TAG, "Read Result  " + result);
             }
@@ -150,7 +145,7 @@ public class CardScannerActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             String result = processIntent(intent);
-//            editText.setText(result);
+            editText.setText(result);
 
 
         }
@@ -162,95 +157,30 @@ public class CardScannerActivity extends AppCompatActivity {
      */
     @SuppressLint("NewApi")
     private String processIntent(Intent intent) {
-       /* Parcelable[] rawmsgs = intent
-                .getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-        NdefMessage msg = (NdefMessage) rawmsgs[0];
-        NdefRecord[] records = msg.getRecords();
-        String resultStr = new String(records[0].getPayload());*/
 
 
         Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        MifareClassic mifareClassic = MifareClassic.get(tag);
-        if (mifareClassic == null) {
 
-            Log.e(TAG, "It is not a Mifare card");
-        }
-
-        MifareClassCard mifareClassCard = null;
-
-        try {
-            mifareClassic.connect();
-
-            boolean auth = false;
-            // 5.2) and get the number of sectors this card has..and loop
-            // thru these sectors
-            int secCount = mifareClassic.getSectorCount();
-            mifareClassCard = new MifareClassCard(secCount);
-            int bCount = 0;
-            int bIndex = 0;
-
-            for (int j = 0; j < secCount; j++) {
-                MifareSector mifareSector = new MifareSector();
-                mifareSector.sectorIndex = j;
-                // 6.1) authenticate the sector
-                auth = mifareClassic.authenticateSectorWithKeyA(j,
-                        MifareClassic.KEY_DEFAULT);
-                mifareSector.authorized = auth;
-                if (auth) {
-                    // 6.2) In each sector - get the block count
-                    bCount = mifareClassic.getBlockCountInSector(j);
-                    bCount = Math.min(bCount, MifareSector.BLOCKCOUNT);
-                    bIndex = mifareClassic.sectorToBlock(j);
-                    for (int i = 0; i < bCount; i++) {
-
-                        // 6.3) Read the block
-                        byte[] data = mifareClassic.readBlock(bIndex);
-                        MifareBlock mifareBlock = new MifareBlock(data);
-                        mifareBlock.blockIndex = bIndex;
-                        // 7) Convert the data into a string from Hex
-                        // format.
-
-                        bIndex++;
-                        mifareSector.blocks[i] = mifareBlock;
+        byte[] byteTagId= tag.getId();
+        String hexTagId=StringUtils.bytesToHexString(byteTagId);
 
 
-                    }
-                    mifareClassCard.setSector(mifareSector.sectorIndex,
-                            mifareSector);
-                } else { // Authentication failed - Handle it
-
-                }
-            }
-
-            ArrayList<String> blockData = new ArrayList<String>();
-
-            int blockIndex = 0;
-            for (int i = 0; i < secCount; i++) {
-
-                MifareSector mifareSector = mifareClassCard.getSector(i);
-                for (int j = 0; j < MifareSector.BLOCKCOUNT; j++) {
-                    MifareBlock mifareBlock = mifareSector.blocks[j];
-                    byte[] data = mifareBlock.getData();
-                    blockData.add("Block " + blockIndex++ + " : " + StringUtils.bytesToHexString(data));
-                }
-            }
-
-            //---------------------显示输出---------------------
-            String[] contents = new String[blockData.size()];
-            blockData.toArray(contents);
-//            listView.setAdapter(new ArrayAdapter<String>(this,
-//                    android.R.layout.simple_list_item_1, contents));
-
-            Log.e(TAG, String.valueOf(contents));
 
 
-            mifareClassic.close();
+        int tagId = StringUtils.hexToDecimal(hexTagId);
 
-        } catch (IOException e) {
-                Log.e(TAG,"Exception "+ e.getLocalizedMessage());
-        }
+        /*for(byte b: byteTagId){
+            Log.e(TAG, "\n+ byte tag id "+b);
 
-        return "";
+        }*/
+
+        Log.e(TAG,
+                "\nHex tag " + hexTagId
+                + "\n Tag id "+tagId);
+
+
+
+        return String.valueOf(tagId);
     }
 
 
@@ -310,7 +240,7 @@ public class CardScannerActivity extends AppCompatActivity {
                                     public void run() {
 
                                         noTv.setText(editText.getText().toString().trim());
-                                        getCardDetail(editText.getText().toString().trim(),
+                                        getCardDetail("0"+editText.getText().toString().trim(),
                                                 SharedPrefUtil.getString(CardScannerActivity.this, "HONDA_PREF", "KEY"),
                                                 SharedPrefUtil.getString(CardScannerActivity.this, "HONDA_PREF", "SITE_NAME"));
                                         editText.setText("");
@@ -331,7 +261,12 @@ public class CardScannerActivity extends AppCompatActivity {
 
     public void getCardDetail(String cardno, String key, String siteName) {
 
+        Log.e(TAG,cardno);
+
+
+
         mCustomDialog.showLoadingDialogWithMessage("getting details...");
+
         ApiClient.getApiClient().getCardDetails(cardno, key, siteName).enqueue(new Callback<ArrayList<CardDetails>>() {
             @Override
             public void onResponse(Call<ArrayList<CardDetails>> call, Response<ArrayList<CardDetails>> response) {
